@@ -1,19 +1,19 @@
-# Lab 07 - Integrated Multi-Tier Architecture on Red Hat OpenShift: Capstone Guestbook with MariaDB and S2I
+# Lab 07 - Integrated Multi-Tier Architecture on Red Hat OpenShift: Capstone Guestbook with MySQL and S2I
 
 * **Program:** MBA in MultiCloud Strategy & Architecture
 * **Environment / Platform:** Red Hat Academy (DO180 v4.14 / Red Hat OpenShift Container Platform 4.14)
-* **Technical Stack:** OpenShift Multi-Tier, MariaDB Stateful (`mariadb-persistent`), Kubernetes Secrets (`db-pass`), PVC (1Gi), Internal DNS Service Discovery, Source-to-Image (S2I), Ingress Routes, Health Probes, Chaos Engineering
+* **Technical Stack:** OpenShift Multi-Tier, MySQL Stateful (`mysql:latest`), Kubernetes Secrets (`db-pass`), PVC (1Gi), Internal DNS Service Discovery, Source-to-Image (S2I), Ingress Routes, Health Probes, Chaos Engineering
 * **Estimated Duration:** 45 to 60 minutes (Self-Guided Capstone Challenge)
 
 ---
 
 ## 🎯 Lab Objectives
 
-Equip the engineer to integrate and consolidate all core architectural competencies mastered throughout the MBA program (declarative deployment orchestration, secret management, continuous Source-to-Image build pipelines, internal DNS service discovery, autonomous health probes, and durable block storage persistence) into an **Enterprise-Grade Capstone Project**: shipping a resilient multi-tier banking web application (*Guestbook*) consisting of an interactive Node.js frontend and a persistent MariaDB backend immune to catastrophic node/pod failures.
+Equip the engineer to integrate and consolidate all core architectural competencies mastered throughout the MBA program (declarative deployment orchestration, secret management, continuous Source-to-Image build pipelines, internal DNS service discovery, autonomous health probes, and durable block storage persistence) into an **Enterprise-Grade Capstone Project**: shipping a resilient multi-tier banking web application (*Guestbook*) consisting of an interactive Node.js frontend and a persistent MySQL backend immune to catastrophic node/pod failures.
 
 **Enterprise Scenario (FinCorp Capstone Mission):**  
 The *FinCorp* Enterprise Architecture Board has issued the final engineering mandate of the cloud modernization program: deploy the corporate audit and guest ledger platform (*Guestbook*) adhering to the highest cloud-native reliability standards. The architecture strictly enforces architectural separation of concerns:
-1. **Data Layer (Stateful Backend):** An enterprise MariaDB relational database backed by a durable 1Gi persistent volume claim (PVC) and secured with Kubernetes Secrets, isolated from public ingress and discoverable strictly within the cluster network fabric.
+1. **Data Layer (Stateful Backend):** An enterprise MySQL relational database backed by a durable 1Gi persistent volume claim (PVC) and secured with Kubernetes Secrets, isolated from public ingress and discoverable strictly within the cluster network fabric.
 2. **Application Layer (Stateless Frontend):** A Node.js web application built through the native Source-to-Image (S2I) pipeline directly from the internal private Git server (Gitea), discovering the database via internal Kubernetes DNS (`guestbook-db`).
 3. **Resilience & Chaos Engineering:** Fully configured Liveness and Readiness Probes, validated through deliberate chaos injection (pod termination), proving zero transactional data loss and automated cluster self-healing.
 
@@ -87,7 +87,7 @@ oc create secret generic db-pass --from-literal=password=P@ssw0rd123
 
 ---
 
-### Step 3: Stateful Data Tier Deployment (MySQL/MariaDB with Persistence)
+### Step 3: Stateful Data Tier Deployment (MySQL with Persistence)
 
 Deploy the relational database tier using the official Red Hat container image stream (`mysql:latest`), running under the unprivileged standard (SCC `restricted-v2`), and declaratively attach an enterprise 1Gi *PersistentVolumeClaim (PVC)* to persist the `/var/lib/mysql/data` directory:
 

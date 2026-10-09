@@ -1,8 +1,8 @@
-# Lab 07 - Arquitetura Multi-Tier Integrada no Red Hat OpenShift: Missão Final Guestbook com MariaDB e S2I
+# Lab 07 - Arquitetura Multi-Tier Integrada no Red Hat OpenShift: Missão Final Guestbook com MySQL e S2I
 
 * **Programa:** MBA em MultiCloud Strategy & Architecture
 * **Ambiente / Plataforma:** Red Hat Academy (DO180 v4.14 / Red Hat OpenShift Container Platform 4.14)
-* **Stack Técnica:** OpenShift Multi-Tier, MariaDB Stateful (`mariadb-persistent`), Kubernetes Secrets (`db-pass`), PVC (1Gi), Internal DNS Service Discovery, Source-to-Image (S2I), Ingress Routes, Health Probes, Chaos Engineering
+* **Stack Técnica:** OpenShift Multi-Tier, MySQL Stateful (`mysql:latest`), Kubernetes Secrets (`db-pass`), PVC (1Gi), Internal DNS Service Discovery, Source-to-Image (S2I), Ingress Routes, Health Probes, Chaos Engineering
 * **Duração Estimada:** 45 a 60 minutos (Desafio Integrador Capstone Autoguiado)
 
 ---
@@ -13,7 +13,7 @@ Capacitar o aluno a integrar e consolidar todos os pilares arquiteturais dominad
 
 **Cenário Corporativo (FinCorp Missão Final Capstone):**  
 O comitê executivo de arquitetura da *FinCorp* convocou sua equipe para a prova de fogo da jornada de modernização de plataformas: entregar o sistema bancário corporativo de auditoria e registros (*Guestbook*) operando sob os mais rigorosos padrões de confiabilidade *cloud-native*. A solução exige a separação estrita de responsabilidades:
-1. **Camada de Dados (Stateful):** Um banco de dados MariaDB corporativo com persistência real em disco (PVC de 1Gi) e credenciais blindadas via Secret, isolado na rede interna e sem exposição pública direta.
+1. **Camada de Dados (Stateful):** Um banco de dados MySQL corporativo com persistência real em disco (PVC de 1Gi) e credenciais blindadas via Secret, isolado na rede interna e sem exposição pública direta.
 2. **Camada de Aplicação (Stateless):** Um frontend Node.js compilado pela esteira Source-to-Image (S2I) a partir do servidor Git privado (Gitea) do cluster, conectando-se ao banco via resolução de nomes do DNS interno do Kubernetes (`guestbook-db`).
 3. **Resiliência & Engenharia de Caos:** Probes de Liveness/Readiness configuradas e validação obrigatória através de um teste de falha deliberada (destruição do pod do banco de dados), comprovando tolerância a desastres e zero perda transacional.
 
@@ -87,7 +87,7 @@ oc create secret generic db-pass --from-literal=password=P@ssw0rd123
 
 ---
 
-### Passo 3: Provisionamento da Camada de Dados (MySQL/MariaDB com Persistência)
+### Passo 3: Provisionamento da Camada de Dados (MySQL com Persistência)
 
 Provisionaremos a instância relacional utilizando o ImageStream oficial da Red Hat (`mysql:latest`), que opera sob o padrão de segurança não-privilegiado (SCC `restricted-v2`), e em seguida anexaremos declarativamente um *PersistentVolumeClaim (PVC)* corporativo de 1Gi para persistir o diretório `/var/lib/mysql/data`:
 
@@ -208,7 +208,7 @@ Aguarde a mensagem `Push successful` e a conclusão do build pod.
 
 ### Passo 6: Configuração de Sondas de Saúde e Exposição de Ingress
 
-1. Configure as sondas de **Liveness** e **Readiness** no frontend. Observe o delay de 10s no Readiness para dar tempo da aplicação estabelecer o pool de conexões com o MariaDB:
+1. Configure as sondas de **Liveness** e **Readiness** no frontend. Observe o delay de 10s no Readiness para dar tempo da aplicação estabelecer o pool de conexões com o MySQL:
    ```bash
    oc set probe deployment/guestbook-frontend --liveness --get-url=http://:8080/ --initial-delay-seconds=30
    oc set probe deployment/guestbook-frontend --readiness --get-url=http://:8080/ --initial-delay-seconds=10

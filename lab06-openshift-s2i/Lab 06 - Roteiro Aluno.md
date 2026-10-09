@@ -160,7 +160,7 @@ Agora que dispomos de um servidor Git corporativo dentro da malha do OpenShift, 
    * **Repository Name:** `meu-app-nodejs`
    * Certifique-se de que a visibilidade seja **Public** (para permitir leitura pelo builder S2I sem necessidade de token SSH/chave privada).
 3. Clique em **Migrate Repository**.
-4. Em instantes, o repositório será clonado e exibirá os arquivos do projeto (`package.json`, `server.js`, `public/index.html`).
+4. Em instantes, o repositório será clonado e exibirá os arquivos do projeto (`package.json`, `app.js`, `public/index.html`).
 5. Copie a URL HTTP de clone do repositório exibida no topo da página:  
    Exemplo: `http://meu-git-lab-open-shift-seunome.apps.ocp4.example.com/aluno/meu-app-nodejs.git`
 
@@ -248,9 +248,9 @@ oc get pods -l deployment=fabrica-app
 2. Abra a URL da rota `fabrica-app` no navegador Firefox. A página de exemplo do Node.js será exibida.
 3. **Teste de Ciclo de Vida (Commit & Build):**
    * Retorne ao painel do **Gitea** no navegador.
-   * Navegue no repositório `meu-app-nodejs` até o diretório `views/` (ou abra `server.js` / `public/index.html`).
-   * Clique no ícone de lápis para **Editar** o arquivo `views/index.html`.
-   * Altere o título principal para:  
+   * Navegue no repositório `meu-app-nodejs` até o diretório `public/`.
+   * Clique no arquivo `index.html` e depois no ícone de lápis para **Editar**.
+   * Localize a tag `<h1>` (que contém originalmente `Node.js Crud Application`) e altere o título principal para:  
      `<h1>MBA MultiCloud FIAP - Fabrica S2I Soberana (Aluno: SeuNome)</h1>`
    * Role até o rodapé da página e clique em **Commit Changes**.
 4. Dispare uma nova compilação na esteira S2I:

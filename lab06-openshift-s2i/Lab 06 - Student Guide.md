@@ -160,7 +160,7 @@ Now that sovereign Git infrastructure is operational inside the cluster network 
    * **Repository Name:** `meu-app-nodejs`
    * Ensure **Visibility** is set to **Public** (allowing unauthenticated read access from internal OpenShift build pods).
 3. Click **Migrate Repository**.
-4. Within moments, the repository will be fully cloned with all files (`package.json`, `server.js`, `public/index.html`).
+4. Within moments, the repository will be fully cloned with all files (`package.json`, `app.js`, `public/index.html`).
 5. Copy the HTTP clone URL displayed at the top of the repository page:  
    Example: `http://meu-git-lab-open-shift-seunome.apps.ocp4.example.com/aluno/meu-app-nodejs.git`
 
@@ -248,9 +248,9 @@ oc get pods -l deployment=fabrica-app
 2. Open the `fabrica-app` route URL in Firefox to view the running Node.js web application.
 3. **Continuous Lifecycle Test (Commit & Automated Rollout):**
    * Return to the **Gitea** web console in Firefox.
-   * Inside the `meu-app-nodejs` repository, navigate to `views/index.html` (or open `server.js` / `public/index.html`).
-   * Click the pencil icon to **Edit** the file.
-   * Update the primary header line to:  
+   * Inside the `meu-app-nodejs` repository, navigate to the `public/` directory.
+   * Click on the `index.html` file and click the pencil icon to **Edit** the file.
+   * Locate the `<h1>` tag (originally containing `Node.js Crud Application`) and update the primary header line to:  
      `<h1>MBA MultiCloud FIAP - Sovereign S2I Factory (Engineer: YourName)</h1>`
    * Scroll down and click **Commit Changes**.
 4. Trigger a new compilation run in the S2I pipeline:
